@@ -14,10 +14,17 @@ def canonicalize_mol(rxn_smi,split):
 
     smi=rxn_smi.split(">")[split]
     mol=Chem.MolFromSmiles(smi)
-    [a.ClearProp("molAtomMapNumber") for a in mol.GetAtoms()]
-    smi = Chem.MolToSmiles(mol, True)
-    smi = Chem.MolToSmiles(Chem.MolFromSmiles(smi), True)
+
+    # DS-DEBUG
+    try:
+        [a.ClearProp("molAtomMapNumber") for a in mol.GetAtoms()]
+        smi = Chem.MolToSmiles(mol, True)
+        smi = Chem.MolToSmiles(Chem.MolFromSmiles(smi), True)
+    except:
+        smi = 'NoneTypeError'
+
     return smi
+
 
 def get_templates(rxn_smi, prec, no_special_groups, radius, add_brackets=True):
     """

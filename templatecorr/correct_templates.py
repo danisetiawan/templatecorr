@@ -194,6 +194,11 @@ def templates_from_file(path, reaction_column = "rxn_smiles", name="template", n
     print("Preprocessing reactants...")
     data["canonical_reac_smiles"] = Parallel(n_jobs=nproc, verbose=1)(delayed(canonicalize_mol)(rxn_smi,0) for rxn_smi in data[reaction_column])
 
+    # DS-DEBUG
+    fail = data[data['canonical_reac_smiles'] == 'NoneTypeError']
+    fail.to_csv('failed.csv')
+    data = data[data['canonical_reac_smiles'] != 'NoneTypeError']
+
     print("Extracting templates (Radius 1 with special groups)...")
     data[name] = parallel_extract(data, False, 1, reaction_column, nproc=nproc)
 
