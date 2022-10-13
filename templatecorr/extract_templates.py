@@ -15,13 +15,13 @@ def canonicalize_mol(rxn_smi,split):
     smi=rxn_smi.split(">")[split]
     mol=Chem.MolFromSmiles(smi)
 
-    # DS-DEBUG
+    # DS-ADD: Ignore if any RDKit parsing error
     try:
         [a.ClearProp("molAtomMapNumber") for a in mol.GetAtoms()]
         smi = Chem.MolToSmiles(mol, True)
         smi = Chem.MolToSmiles(Chem.MolFromSmiles(smi), True)
     except:
-        smi = 'NoneTypeError'
+        smi = 'RDKitParseError'
 
     return smi
 
